@@ -89,4 +89,4 @@ LANGUAGE plpgsql;
 
 SELECT observe_table('public', 'sot_products', true);
 SELECT observe_table('public', 'sot_counters', true);
-SELECT observe_table('public', 'sot_listing', true);
+SELECT observe_table('public', 'sot_listings', true);

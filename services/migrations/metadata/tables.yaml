@@ -3,7 +3,7 @@
     name: sot_counters
 - table:
     schema: public
-    name: sot_listing
+    name: sot_listings
 - table:
     schema: public
     name: sot_products

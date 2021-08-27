@@ -36,18 +36,35 @@ services:
       timeout: 5s
       retries: 20
 
-  products:
-    image: node:14-alpine
-    volumes:
-      - .docker-data/products/node_modules:/usr/src/app/node_modules:cached
-      - ./services/products/package.json:/usr/src/app/package.json:delegated
-      - ./services/products/package-lock.json:/usr/src/app/package-lock.json:delegated
-      - ./services/products/src:/usr/src/app/src:delegated
-    environment:
-      NODE_ENV: development
-      PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
-    working_dir: /usr/src/app
-    entrypoint: ["npm", "run", "start:docker"]
+  migrations:
+    build:
+      context: ./services/migrations
     depends_on:
       hasura:
         condition: service_healthy
+    volumes:
+      - ./services/migrations/metadata:/metadata:cached
+      - ./services/migrations/migrations:/migrations:cached
+      - ./services/migrations/seeds:/seeds:cached
+    environment:
+      HASURA_ENDPOINT: http://hasura:8080
+      HASURA_ADMIN_SECRET: ${HASURA_ADMIN_SECRET:-qwerty}
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+    stdin_open: true
+    tty: true
+
+  # products:
+  #   image: node:14-alpine
+  #   volumes:
+  #     - .docker-data/products/node_modules:/usr/src/app/node_modules:cached
+  #     - ./services/products/package.json:/usr/src/app/package.json:delegated
+  #     - ./services/products/package-lock.json:/usr/src/app/package-lock.json:delegated
+  #     - ./services/products/src:/usr/src/app/src:delegated
+  #   environment:
+  #     NODE_ENV: development
+  #     PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
+  #   working_dir: /usr/src/app
+  #   entrypoint: ["npm", "run", "start:docker"]
+  #   depends_on:
+  #     hasura:
+  #       condition: service_healthy
