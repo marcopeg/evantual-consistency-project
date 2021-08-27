@@ -1,0 +1,9 @@
+- table:
+    schema: public
+    name: sot_counters
+- table:
+    schema: public
+    name: sot_listing
+- table:
+    schema: public
+    name: sot_products
