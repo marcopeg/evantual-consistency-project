@@ -53,18 +53,19 @@ services:
     stdin_open: true
     tty: true
 
-  # products:
-  #   image: node:14-alpine
-  #   volumes:
-  #     - .docker-data/products/node_modules:/usr/src/app/node_modules:cached
-  #     - ./services/products/package.json:/usr/src/app/package.json:delegated
-  #     - ./services/products/package-lock.json:/usr/src/app/package-lock.json:delegated
-  #     - ./services/products/src:/usr/src/app/src:delegated
-  #   environment:
-  #     NODE_ENV: development
-  #     PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
-  #   working_dir: /usr/src/app
-  #   entrypoint: ["npm", "run", "start:docker"]
-  #   depends_on:
-  #     hasura:
-  #       condition: service_healthy
+  products:
+    image: node:14-alpine
+    volumes:
+      - .docker-data/products/node_modules:/usr/src/app/node_modules:cached
+      - ./services/products/package.json:/usr/src/app/package.json:delegated
+      - ./services/products/package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./services/products/src:/usr/src/app/src:delegated
+    environment:
+      NODE_ENV: development
+      PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
+      CURSOR_ID: products_build_cache
+    working_dir: /usr/src/app
+    entrypoint: ["npm", "run", "start:docker"]
+    depends_on:
+      hasura:
+        condition: service_healthy

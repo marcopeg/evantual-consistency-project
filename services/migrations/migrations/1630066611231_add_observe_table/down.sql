@@ -6,3 +6,4 @@ DROP FUNCTION observe_table;
 DROP FUNCTION observe_table_trigger_handler;
 
 DROP TABLE IF EXISTS "public"."changelog";
+DROP TABLE IF EXISTS "public"."changelog_cursor";

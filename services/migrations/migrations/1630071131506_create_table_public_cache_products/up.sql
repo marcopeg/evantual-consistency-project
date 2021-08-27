@@ -1,0 +1,1 @@
+CREATE TABLE "public"."cache_products" ("id" integer NOT NULL, "created_at" timestamptz NOT NULL, "updated_at" timestamptz NOT NULL, "cache_updated_at" timestamptz NOT NULL, "title" text NOT NULL, "price" integer NOT NULL, "qt_available" integer NOT NULL, "qt_booked" integer NOT NULL, PRIMARY KEY ("id") , UNIQUE ("id"));

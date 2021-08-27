@@ -11,6 +11,11 @@ CREATE TABLE "public"."changelog" (
   PRIMARY KEY ("id")
 );
 
+CREATE TABLE "public"."changelog_cursor" (
+  "cursor_id" TEXT PRIMARY KEY,
+  "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
 -- Logs a full JSON representation of the data change into a log table:
 CREATE OR REPLACE FUNCTION observe_table_trigger_handler() RETURNS TRIGGER AS $$
 DECLARE
@@ -47,7 +52,7 @@ BEGIN
     "new_data",
     "old_data"
   ) VALUES (
-    CURRENT_TIMESTAMP,
+    clock_timestamp(),
     TG_TABLE_SCHEMA,
     TG_TABLE_NAME,
     TG_OP,
