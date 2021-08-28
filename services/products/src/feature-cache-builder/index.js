@@ -1,6 +1,6 @@
 const changelog = require("./changelog");
-const onProductInsert = require("./on-product-insert");
-const onCounterInsert = require("./on-counter-insert");
+const onProductInsert = require("./on-product-insert-update");
+const onCounterInsert = require("./on-counter-insert-update");
 
 const featureCacheBuilder = ({ getContext }) => ({
   hook: "$FINISH",
@@ -17,17 +17,19 @@ const featureCacheBuilder = ({ getContext }) => ({
     // Event Router
     const logHandler = async (log) => {
       const event = `${log.operation.toLowerCase()}@${log.table}`;
-      console.log("Handle:", event);
+      console.log("[Cache Builder]", event);
 
       switch (event) {
         case "insert@sot_products":
+        case "update@sot_products":
           await onProductInsert(db, log);
           break;
         case "insert@sot_counters":
+        case "update@sot_counters":
           await onCounterInsert(db, log);
           break;
         default:
-          console.log("Unhandled:", event);
+          console.log("[Cache Builder] Unhandled:", event);
       }
     };
 

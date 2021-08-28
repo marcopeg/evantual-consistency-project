@@ -9,15 +9,17 @@
         columns: '*'
       update:
         columns:
-        - updated_at
-        - etag_sot
-        - price
-        - qt_booked
-        - etag_cache
-        - id
+        - is_updating
         - created_at
+        - updated_at
         - title
         - qt_available
+        - is_deleting
+        - etag_cache
+        - id
+        - etag_sot
+        - qt_booked
+        - price
     retry_conf:
       num_retries: 0
       interval_sec: 10

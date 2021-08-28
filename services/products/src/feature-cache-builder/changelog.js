@@ -89,7 +89,7 @@ class Worker {
     {
       batch = 10,
       delay = 0,
-      sleep = 5000,
+      sleep = 1000,
       stopDelay = 100,
       stopAttempts = 300 // 30s
     } = {}

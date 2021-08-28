@@ -9,6 +9,14 @@ const getQueueName = (prev, curr) => {
   return Object.keys(changes);
 };
 
+// Exposes an API that receives the Hasura event when
+// the products' cache gets changed.
+//
+// The responsibility is to identify a change that was
+// NOT caused by change of Source Of Truth.
+//
+// The action is to propagate the change into a queue
+// that will then reflect it into the source of truth.
 const featureCacheMonitor = ({ registerAction }) => {
   registerAction({
     hook: "$FASTIFY_POST",
@@ -26,8 +34,12 @@ const featureCacheMonitor = ({ registerAction }) => {
           // Forward the event to each relevant queue for updating the
           // related source of truth service:
           for (const queue of getQueueName(data.old, data.new)) {
-            console.log("Queue update into:", queue);
-            await req.fetchq.doc.append(queue, req.body);
+            console.log("[Cache Monitor] Queue into:", queue);
+            try {
+              await req.fetchq.doc.append(queue, req.body);
+            } catch (err) {
+              console.log(err);
+            }
           }
           return "udated";
         }
