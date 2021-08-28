@@ -30,6 +30,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET:-qwerty}
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key":"dd5dd7i2vddf786vs7v3fgb87987vdsc7sd98"}'
+      EVT_PROJECT_CACHE_UPDATE: http://products:8080/on-cache-products-update
     healthcheck:
       test: ["CMD", "wget", "-qO", "-", "http://localhost:8080/healthz"]
       interval: 5s
@@ -64,6 +65,8 @@ services:
       NODE_ENV: development
       PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
       CURSOR_ID: products_build_cache
+    ports:
+      - ${PRODUCTS_PORT:-4000}:8080
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "start:docker"]
     depends_on:

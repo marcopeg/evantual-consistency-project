@@ -1,39 +1,35 @@
-const { Pool } = require("pg");
-const changelog = require("./changelog");
-const onProductInsert = require("./on-product-insert");
-const onCounterInsert = require("./on-counter-insert");
+const { runHookApp } = require("@forrestjs/hooks");
+const serviceFastify = require("@forrestjs/service-fastify");
+const serviceFetchq = require("@forrestjs/service-fetchq");
 
-// Create the Postgre's client instance
-const connectionString = process.env.PGSTRING;
-const db = new Pool({ connectionString });
+const featureCacheBuilder = require("./feature-cache-builder");
+const featureCacheMonitor = require("./feature-cache-monitor");
 
-// Initiate the connection:
-db.connect()
-  .then(async () => {
-    // Upsert the cursor for this microservice:
-    const cursorId = process.env.CURSOR_ID;
-    await changelog.subscribe(db, cursorId);
-    await changelog.reset(db, cursorId, "1900-1-1");
-    console.log("consume changelog for:", cursorId);
+// Temporary feature to simulate an update in the products cache
+const featureSimulateCacheUpdate = () => ({
+  hook: "$FINISH",
+  handler: ({ getContext }) =>
+    setTimeout(() => {
+      console.log("--> Update cache!");
+      getContext("fetchq").pool.query(`
+        UPDATE cache_products SET
+          title = 'apple1',
+          price = 1,
+          qt_available = 99 ,
+          etag_cache = now()
+        WHERE id = 1
+      `);
+    }, 250)
+});
 
-    const logHandler = async (log) => {
-      const event = `${log.operation.toLowerCase()}@${log.table}`;
-      console.log("Handle:", event);
-
-      switch (event) {
-        case "insert@sot_products":
-          await onProductInsert(db, log);
-          break;
-        case "insert@sot_counters":
-          await onCounterInsert(db, log);
-          break;
-        default:
-          console.log("Unhandled:", event);
-      }
-    };
-
-    const wk1 = changelog.run(db, cursorId, logHandler);
-  })
-  .catch((err) => {
-    console.error("ERROR:", err.message);
-  });
+runHookApp({
+  trace: "compact",
+  services: [serviceFetchq, serviceFastify],
+  features: [
+    featureCacheBuilder,
+    featureCacheMonitor,
+    featureSimulateCacheUpdate
+  ]
+}).catch((err) => {
+  console.error("ERROR:", err.message);
+});
