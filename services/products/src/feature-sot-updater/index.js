@@ -1,4 +1,5 @@
 const updateSotProducts = require("./update-sot-products");
+const updateSotCounters = require("./update-sot-counters");
 
 const featureSotUpdate = ({ registerAction }) => {
   registerAction({
@@ -7,6 +8,10 @@ const featureSotUpdate = ({ registerAction }) => {
       {
         queue: "update_sot_products",
         handler: updateSotProducts
+      },
+      {
+        queue: "update_sot_counters",
+        handler: updateSotCounters
       }
     ]
   });

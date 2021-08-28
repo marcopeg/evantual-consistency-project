@@ -7,7 +7,7 @@ const featureCacheMonitor = require("./feature-cache-monitor");
 const featureSotUpdate = require("./feature-sot-updater");
 
 // Temporary feature to simulate an update in the products cache
-// It also truncates the queues
+// It also truncates the queues:
 const featureSimulateCacheUpdate = () => ({
   hook: "$FINISH",
   handler: ({ getContext }) =>
@@ -23,7 +23,8 @@ const featureSimulateCacheUpdate = () => ({
         UPDATE cache_products SET
           title = 'apple_${Date.now()}',
           price = 1,
-          qt_available = 99 ,
+          qt_available = 99,
+          qt_booked = 88,
           etag_cache = now(),
           is_updating = true
         WHERE id = 1
