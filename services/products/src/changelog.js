@@ -88,8 +88,8 @@ class Worker {
     fn,
     {
       batch = 10,
-      delay = 100,
-      sleep = 1000,
+      delay = 0,
+      sleep = 5000,
       stopDelay = 100,
       stopAttempts = 300 // 30s
     } = {}
@@ -148,8 +148,6 @@ class Worker {
 
   async loop() {
     if (!this._isRunning || this._isStopping) return false;
-
-    console.log("@loop");
 
     // Exec the batch:
     this._isLooping = true;

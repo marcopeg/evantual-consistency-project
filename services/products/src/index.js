@@ -1,5 +1,7 @@
 const { Pool } = require("pg");
 const changelog = require("./changelog");
+const onProductInsert = require("./on-product-insert");
+const onCounterInsert = require("./on-counter-insert");
 
 // Create the Postgre's client instance
 const connectionString = process.env.PGSTRING;
@@ -15,22 +17,22 @@ db.connect()
     console.log("consume changelog for:", cursorId);
 
     const logHandler = async (log) => {
-      console.log(log.id, log.timestamp);
-      await new Promise((r) => setTimeout(r, 500));
+      const event = `${log.operation.toLowerCase()}@${log.table}`;
+      console.log("Handle:", event);
+
+      switch (event) {
+        case "insert@sot_products":
+          await onProductInsert(db, log);
+          break;
+        case "insert@sot_counters":
+          await onCounterInsert(db, log);
+          break;
+        default:
+          console.log("Unhandled:", event);
+      }
     };
 
-    const wk1 = changelog.run(db, cursorId, logHandler, {
-      batch: 4
-    });
-
-    setTimeout(
-      () =>
-        wk1
-          .stop()
-          .then(() => console.log("STOPPED"))
-          .catch(console.error),
-      3000
-    );
+    const wk1 = changelog.run(db, cursorId, logHandler);
   })
   .catch((err) => {
     console.error("ERROR:", err.message);

@@ -1,8 +1,5 @@
 - table:
     schema: public
-    name: cache_products
-- table:
-    schema: public
     name: sot_counters
 - table:
     schema: public
