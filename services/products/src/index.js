@@ -1,28 +1,37 @@
-// Create client to the db:
 const { Pool } = require("pg");
-const db = new Pool({
-  connectionString: process.env.PGSTRING
-});
+const changelog = require("./changelog");
 
-const getLogs = (db, lastCursorId = null) => {
-  /*
-SELECT * FROM "changelog"
-WHERE "timestamp" > COALESCE(
-	(SELECT "timestamp" FROM "changelog_cursor" WHERE "cursor_id" = 'foo'),
-	NOW() - INTERVAL '100y'
-)
-ORDER BY "timestamp" ASC
-LIMIT 4
-;
-*/
-};
+// Create the Postgre's client instance
+const connectionString = process.env.PGSTRING;
+const db = new Pool({ connectionString });
 
 // Initiate the connection:
 db.connect()
-  .then(() => {
+  .then(async () => {
+    // Upsert the cursor for this microservice:
     const cursorId = process.env.CURSOR_ID;
+    await changelog.subscribe(db, cursorId);
+    await changelog.reset(db, cursorId, "1900-1-1");
     console.log("consume changelog for:", cursorId);
+
+    const logHandler = async (log) => {
+      console.log(log.id, log.timestamp);
+      await new Promise((r) => setTimeout(r, 500));
+    };
+
+    const wk1 = changelog.run(db, cursorId, logHandler, {
+      batch: 4
+    });
+
+    setTimeout(
+      () =>
+        wk1
+          .stop()
+          .then(() => console.log("STOPPED"))
+          .catch(console.error),
+      3000
+    );
   })
-  .catch(() => {
-    console.log("Could not connect to pg");
+  .catch((err) => {
+    console.error("ERROR:", err.message);
   });
