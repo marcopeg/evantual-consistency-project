@@ -70,5 +70,5 @@ services:
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "start:docker"]
     depends_on:
-      hasura:
+      postgres:
         condition: service_healthy
