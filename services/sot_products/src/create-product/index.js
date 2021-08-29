@@ -25,12 +25,11 @@ const handler = async (req, reply) => {
   // Throw error in case the product already exists:
   if (data.affected_rows === 0) {
     reply.status(400).send("Product already exists!");
+    return;
   }
 
-  // Log the event:
+  // Log the event & send output:
   await req.logEvent("product-was-created", data.returning[0]);
-
-  // Return just the first row:
   reply.send(data.returning[0]);
 };
 

@@ -54,6 +54,7 @@ services:
     stdin_open: true
     tty: true
 
+  # CRUD API on Products
   sot_products:
     image: node:14-alpine
     volumes:
@@ -65,13 +66,35 @@ services:
       NODE_ENV: development
       HASURA_URL: http://hasura:8080/v1/graphql
       HASURA_KEY: eyJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsic290X3Byb2R1Y3RzIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InNvdF9wcm9kdWN0cyJ9fQ.iI8LdiYrS3k_N8iKTYYmj8kewSVBUBwR9JAIGbgPzqs
-      PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
     ports:
-      - ${PRODUCTS_PORT:-4000}:8080
+      - ${SOT_PRODUCTS_PORT:-4000}:8080
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "start:docker"]
     depends_on:
-      postgres:
+      hasura:
+        condition: service_healthy
+
+  # CRUD API on Counters
+  # but also consumes the events log to prepare counters when
+  # a product get created, or remove it when a product gets removed
+  sot_counters:
+    image: node:14-alpine
+    volumes:
+      - .docker-data/sot_counters/node_modules:/usr/src/app/node_modules:cached
+      - ./services/sot_counters/package.json:/usr/src/app/package.json:delegated
+      - ./services/sot_counters/package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./services/sot_counters/src:/usr/src/app/src:delegated
+    environment:
+      NODE_ENV: development
+      HASURA_URL: http://hasura:8080/v1/graphql
+      HASURA_KEY: eyJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsic290X2NvdW50ZXJzIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InNvdF9jb3VudGVycyJ9fQ.xF7vWTKZAfE73gWrnWQl_FU9dGxtXHjLaXK6bDqckco
+      PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
+    ports:
+      - ${SOT_COUNTERS_PORT:-4001}:8080
+    working_dir: /usr/src/app
+    entrypoint: ["npm", "run", "start:docker"]
+    depends_on:
+      hasura:
         condition: service_healthy
 
   products_cache:

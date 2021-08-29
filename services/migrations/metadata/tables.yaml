@@ -54,6 +54,16 @@
     schema: public
     name: changelog
   insert_permissions:
+  - role: sot_counters
+    permission:
+      check: {}
+      set:
+        schema: custom
+        table: custom
+      columns:
+      - new_data
+      - operation
+      backend_only: false
   - role: sot_products
     permission:
       check: {}
@@ -67,6 +77,38 @@
 - table:
     schema: public
     name: sot_counters
+  insert_permissions:
+  - role: sot_counters
+    permission:
+      check: {}
+      set:
+        updated_at: now()
+        created_at: now()
+      columns:
+      - counter_id
+      - product_id
+      - value
+      backend_only: false
+  select_permissions:
+  - role: sot_counters
+    permission:
+      columns:
+      - product_id
+      - value
+      - counter_id
+      - created_at
+      - updated_at
+      filter: {}
+      limit: 10
+  update_permissions:
+  - role: sot_counters
+    permission:
+      columns:
+      - value
+      filter: {}
+      check: {}
+      set:
+        updated_at: now()
 - table:
     schema: public
     name: sot_listings

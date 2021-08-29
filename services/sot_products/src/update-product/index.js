@@ -35,12 +35,11 @@ const handler = async (req, reply) => {
   // Throw error in case the product already exists:
   if (!data) {
     reply.status(400).send("Product does not exists!");
+    return;
   }
 
-  // Log the event:
+  // Log the event & send output:
   await req.logEvent("product-was-updated", data);
-
-  // Return just the first row:
   reply.send(data);
 };
 

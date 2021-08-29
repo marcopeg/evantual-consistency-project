@@ -1,0 +1,19 @@
+{
+  "name": "sot_counters",
+  "version": "1.0.0",
+  "description": "Micro service that offers a REST API to update arbitrary product's counters",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index",
+    "start:docker": "npm i && nodemon src/index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@forrestjs/package-fastify": "4.0.0-alpha.18"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
