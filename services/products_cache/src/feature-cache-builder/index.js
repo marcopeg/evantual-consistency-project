@@ -11,7 +11,7 @@ const featureCacheBuilder = ({ getContext, getConfig }) => ({
     // Upsert the cursor for this microservice:
     const cursorId = getConfig("changelog.cursorId");
     await changelog.subscribe(db, cursorId);
-    await changelog.reset(db, cursorId, "1900-1-1");
+    // await changelog.reset(db, cursorId, "1900-1-1");
     console.log("--> consume changelog for:", cursorId);
 
     // Event Router

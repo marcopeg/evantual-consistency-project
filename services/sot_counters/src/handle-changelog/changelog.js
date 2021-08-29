@@ -77,8 +77,13 @@ const commit = async (db, cursorId, logId) => {
 const batch = async (db, cursorId, fn, batch = 10) => {
   const items = await read(db, cursorId, batch);
   for (const item of items) {
-    await fn(item);
-    await commit(db, cursorId, item.id);
+    try {
+      await fn(item);
+      await commit(db, cursorId, item.id);
+    } catch (err) {
+      console.error(`ERROR PROCESSING LOG`);
+      console.log(err);
+    }
   }
 
   return items.length;
