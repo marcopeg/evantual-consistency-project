@@ -22,12 +22,15 @@ const handler = async (req, reply) => {
   const res = await req.makeGraphQLRequest(createProductMutation, req.body);
   const data = res.data.data.insert_sot_products;
 
-  // Throw error in case the product already exists
+  // Throw error in case the product already exists:
   if (data.affected_rows === 0) {
     reply.status(400).send("Product already exists!");
   }
 
-  // Return just the first row
+  // Log the event:
+  await req.logEvent("product-was-created", data.returning[0]);
+
+  // Return just the first row:
   reply.send(data.returning[0]);
 };
 

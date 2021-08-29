@@ -2,7 +2,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE "public"."changelog" (
   "id" UUID DEFAULT uuid_generate_v1(),
-  "timestamp" TIMESTAMP WITH TIME ZONE,
+  "timestamp" TIMESTAMP WITH TIME ZONE default clock_timestamp(),
   "schema" VARCHAR(255),
   "table" VARCHAR(255),
   "operation" VARCHAR(255),
@@ -92,6 +92,6 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
-SELECT observe_table('public', 'sot_products', true);
-SELECT observe_table('public', 'sot_counters', true);
-SELECT observe_table('public', 'sot_listings', true);
+-- SELECT observe_table('public', 'sot_products', true);
+-- SELECT observe_table('public', 'sot_counters', true);
+-- SELECT observe_table('public', 'sot_listings', true);

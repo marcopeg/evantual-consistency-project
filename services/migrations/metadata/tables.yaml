@@ -52,6 +52,20 @@
     webhook_from_env: EVT_PRODUCTS_CACHE_UPDATE
 - table:
     schema: public
+    name: changelog
+  insert_permissions:
+  - role: sot_products
+    permission:
+      check: {}
+      set:
+        schema: custom
+        table: custom
+      columns:
+      - new_data
+      - operation
+      backend_only: false
+- table:
+    schema: public
     name: sot_counters
 - table:
     schema: public

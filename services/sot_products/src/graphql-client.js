@@ -1,5 +1,22 @@
 const axios = require("axios");
 
+const addChangelog = `
+mutation addChangelog (
+  $event: String!
+  $payload: json!
+) {
+  insert_changelog(
+    objects: {
+      operation: $event
+      new_data: $payload
+    }
+  ) {
+    affected_rows
+  }
+}
+
+`;
+
 const graphqlClient = ({ registerAction }) => {
   registerAction({
     hook: "$FASTIFY_PLUGIN?",
@@ -23,7 +40,11 @@ const graphqlClient = ({ registerAction }) => {
           }
         );
 
+      const logEvent = (event, payload = {}) =>
+        makeGraphQLRequest(addChangelog, { event, payload });
+
       decorateRequest("makeGraphQLRequest", makeGraphQLRequest);
+      decorateRequest("logEvent", logEvent);
     }
   });
 };
