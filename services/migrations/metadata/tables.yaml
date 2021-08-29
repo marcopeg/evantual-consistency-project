@@ -2,58 +2,54 @@
     schema: public
     name: cache_products
   select_permissions:
-  - role: client
-    permission:
-      columns:
-      - created_at
-      - etag_cache
-      - etag_sot
-      - id
-      - is_deleting
-      - is_updating
-      - price
-      - qt_available
-      - qt_booked
-      - title
-      - updated_at
-      filter: {}
-  update_permissions:
-  - role: client
-    permission:
-      columns:
-      - price
-      - qt_available
-      - qt_booked
-      - title
-      filter: {}
-      check: null
-      set:
-        is_updating: "true"
-        etag_cache: now()
-  event_triggers:
-  - name: on_cache_products_change
-    definition:
-      enable_manual: false
-      delete:
-        columns: '*'
-      update:
+    - role: client
+      permission:
         columns:
-        - is_updating
-        - created_at
-        - updated_at
-        - title
-        - qt_available
-        - is_deleting
-        - etag_cache
-        - id
-        - etag_sot
-        - qt_booked
-        - price
-    retry_conf:
-      num_retries: 0
-      interval_sec: 10
-      timeout_sec: 60
-    webhook_from_env: EVT_PROJECT_CACHE_UPDATE
+          - created_at
+          - etag_cache
+          - etag_sot
+          - id
+          - is_deleting
+          - is_updating
+          - price
+          - qt_available
+          - qt_booked
+          - title
+          - updated_at
+        filter: {}
+  update_permissions:
+    - role: client
+      permission:
+        columns:
+          - price
+          - qt_available
+          - qt_booked
+          - title
+        filter: {}
+        check: null
+        set:
+          is_updating: "true"
+          etag_cache: now()
+  event_triggers:
+    - name: on_cache_products_change
+      definition:
+        enable_manual: false
+        delete:
+          columns: "*"
+        update:
+          columns:
+            - title
+            - price
+            - qt_booked
+            - qt_available
+            - is_updating
+            - is_deleting
+            - etag_cache
+      retry_conf:
+        num_retries: 0
+        interval_sec: 10
+        timeout_sec: 60
+      webhook_from_env: EVT_PRODUCTS_CACHE_UPDATE
 - table:
     schema: public
     name: sot_counters

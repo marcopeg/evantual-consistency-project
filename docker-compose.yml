@@ -30,7 +30,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET:-qwerty}
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key":"dd5dd7i2vddf786vs7v3fgb87987vdsc7sd98"}'
-      EVT_PROJECT_CACHE_UPDATE: http://products:8080/on-cache-products-update
+      EVT_PRODUCTS_CACHE_UPDATE: http://products:8080/on-products-cache-updates
     healthcheck:
       test: ["CMD", "wget", "-qO", "-", "http://localhost:8080/healthz"]
       interval: 5s
@@ -54,17 +54,17 @@ services:
     stdin_open: true
     tty: true
 
-  products:
+  products_cache:
     image: node:14-alpine
     volumes:
-      - .docker-data/products/node_modules:/usr/src/app/node_modules:cached
-      - ./services/products/package.json:/usr/src/app/package.json:delegated
-      - ./services/products/package-lock.json:/usr/src/app/package-lock.json:delegated
-      - ./services/products/src:/usr/src/app/src:delegated
+      - .docker-data/products_cache/node_modules:/usr/src/app/node_modules:cached
+      - ./services/products_cache/package.json:/usr/src/app/package.json:delegated
+      - ./services/products_cache/package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./services/products_cache/src:/usr/src/app/src:delegated
     environment:
       NODE_ENV: development
       PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
-      CURSOR_ID: products_build_cache
+      CURSOR_ID: products_cache
     ports:
       - ${PRODUCTS_PORT:-4000}:8080
     working_dir: /usr/src/app

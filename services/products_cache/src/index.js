@@ -36,10 +36,10 @@ runHookApp({
   trace: "compact",
   services: [serviceFetchq, serviceFastify],
   features: [
-    featureCacheBuilder,
-    featureCacheMonitor,
-    featureSotUpdate,
-    featureSimulateCacheUpdate
+    // featureCacheBuilder,
+    // featureCacheMonitor,
+    // featureSotUpdate,
+    // featureSimulateCacheUpdate
   ]
 }).catch((err) => {
   console.error("ERROR:", err.message);
