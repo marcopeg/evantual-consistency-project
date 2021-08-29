@@ -34,9 +34,14 @@ const featureSimulateCacheUpdate = () => ({
 
 runHookApp({
   trace: "compact",
+  settings: {
+    changelog: {
+      cursorId: process.env.CURSOR_ID
+    }
+  },
   services: [serviceFetchq, serviceFastify],
   features: [
-    // featureCacheBuilder,
+    featureCacheBuilder
     // featureCacheMonitor,
     // featureSotUpdate,
     // featureSimulateCacheUpdate

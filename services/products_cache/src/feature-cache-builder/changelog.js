@@ -2,10 +2,13 @@
 // It sets it on the day before the first log entry.
 const subscribeSQL = `
   INSERT INTO "public"."changelog_cursor"
-  VALUES ($1, (
-    SELECT "timestamp" - INTERVAL '1d' FROM "public".changelog
-    ORDER BY "timestamp" ASC
-    LIMIT 1
+  VALUES ($1, COALESCE(
+    (
+      SELECT "timestamp" - INTERVAL '1d' FROM "public".changelog
+      ORDER BY "timestamp" ASC
+      LIMIT 1
+    ),
+    NOW()
   ))
   ON CONFLICT ON CONSTRAINT "changelog_cursor_pkey"
   DO NOTHING
@@ -74,8 +77,13 @@ const commit = async (db, cursorId, logId) => {
 const batch = async (db, cursorId, fn, batch = 10) => {
   const items = await read(db, cursorId, batch);
   for (const item of items) {
-    await fn(item);
-    await commit(db, cursorId, item.id);
+    try {
+      await fn(item);
+      await commit(db, cursorId, item.id);
+    } catch (err) {
+      console.error(`ERROR PROCESSING LOG`);
+      console.log(err);
+    }
   }
 
   return items.length;

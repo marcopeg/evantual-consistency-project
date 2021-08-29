@@ -1,35 +1,36 @@
 const changelog = require("./changelog");
 const onProductInsert = require("./on-product-insert-update");
-const onCounterInsert = require("./on-counter-insert-update");
+const onCountersInsert = require("./on-counters-insert-update");
 
-const featureCacheBuilder = ({ getContext }) => ({
+const featureCacheBuilder = ({ getContext, getConfig }) => ({
   hook: "$FINISH",
   handler: async () => {
     // Get a reference to the Postgre's pool from Fetchq
     const db = getContext("fetchq").pool;
 
     // Upsert the cursor for this microservice:
-    const cursorId = process.env.CURSOR_ID;
+    const cursorId = getConfig("changelog.cursorId");
     await changelog.subscribe(db, cursorId);
     await changelog.reset(db, cursorId, "1900-1-1");
     console.log("--> consume changelog for:", cursorId);
 
     // Event Router
     const logHandler = async (log) => {
-      const event = `${log.operation.toLowerCase()}@${log.table}`;
-      console.log("[Cache Builder]", event);
+      const { operation } = log;
+      console.log("[Cache Builder]", operation);
 
-      switch (event) {
-        case "insert@sot_products":
-        case "update@sot_products":
+      switch (operation) {
+        case "product-was-created":
+        case "product-was-updated":
           await onProductInsert(db, log);
           break;
-        case "insert@sot_counters":
-        case "update@sot_counters":
-          await onCounterInsert(db, log);
+        case "counters-was-created":
+        case "counters-was-updated":
+          // case "update@sot_counters":
+          await onCountersInsert(db, log);
           break;
         default:
-          console.log("[Cache Builder] Unhandled:", event);
+          console.log("[Cache Builder] Unhandled:", operation);
       }
     };
 

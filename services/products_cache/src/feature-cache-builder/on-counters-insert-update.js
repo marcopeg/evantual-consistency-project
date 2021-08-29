@@ -30,17 +30,14 @@ const getFieldName = (counterId) => {
   throw new Error(`Unknown counter: ${counterId}`);
 };
 
-const onCounterInsert = async (db, log) => {
-  const execSQL = upsertSQL.replace(
-    /COUNTER_ID/g,
-    getFieldName(log.new_data.counter_id)
-  );
-
-  await db.query(execSQL, [
-    log.new_data.product_id,
-    log.new_data.value,
-    log.new_data.updated_at
-  ]);
+const onCountersInsert = async (db, log) => {
+  for (const item of log.new_data) {
+    const execSQL = upsertSQL.replace(
+      /COUNTER_ID/g,
+      getFieldName(item.counter_id)
+    );
+    await db.query(execSQL, [item.product_id, item.value, item.updated_at]);
+  }
 };
 
-module.exports = onCounterInsert;
+module.exports = onCountersInsert;

@@ -107,9 +107,9 @@ services:
     environment:
       NODE_ENV: development
       PGSTRING: postgresql://postgres:postgres@postgres:5432/postgres
-      CURSOR_ID: products_cache
+      CURSOR_ID: products-cache
     ports:
-      - ${PRODUCTS_PORT:-4000}:8080
+      - ${PRODUCTS_PORT:-4002}:8080
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "start:docker"]
     depends_on:
