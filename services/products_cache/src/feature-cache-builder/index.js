@@ -24,9 +24,7 @@ const featureCacheBuilder = ({ getContext, getConfig }) => ({
         case "product-was-updated":
           await onProductInsert(db, log);
           break;
-        case "counters-was-created":
         case "counters-was-updated":
-          // case "update@sot_counters":
           await onCountersInsert(db, log);
           break;
         default:

@@ -5,7 +5,6 @@ VALUES
   ($1, 'booked', 0)
 ON CONFLICT ON CONSTRAINT "sot_counters_pkey"
 DO UPDATE SET 
-  "value" = EXCLUDED."value", 
   "updated_at" = EXCLUDED."updated_at"
 RETURNING *
 `;

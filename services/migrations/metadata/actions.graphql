@@ -1,0 +1,28 @@
+type Mutation {
+  createProduct(
+    title: String!
+    price: Int!
+    qt_available: Int!
+  ): CacheProduct
+}
+
+input SampleInput {
+  username: String!
+  password: String!
+}
+
+type SotProduct {
+  id: Int!
+  title: String!
+  price: Int!
+  created_at: String!
+  updated_at: String!
+}
+
+type CacheProduct {
+  title: String!
+  price: Int!
+  qt_available: Int!
+  qt_booked: Int!
+}
+

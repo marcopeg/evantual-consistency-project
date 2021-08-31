@@ -1,5 +1,6 @@
 const { runHookApp } = require("@forrestjs/hooks");
 const serviceFastify = require("@forrestjs/service-fastify");
+const serviceFastifyHealthz = require("@forrestjs/service-fastify-healthz");
 
 const graphqlClient = require("./graphql-client");
 const createProduct = require("./create-product");
@@ -13,7 +14,7 @@ runHookApp({
       key: process.env.HASURA_KEY
     }
   },
-  services: [serviceFastify, graphqlClient],
+  services: [serviceFastify, serviceFastifyHealthz, graphqlClient],
   features: [createProduct, updateProduct]
 }).catch((err) => {
   console.error("ERROR:", err.message);

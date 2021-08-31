@@ -5,6 +5,7 @@ const serviceFetchq = require("@forrestjs/service-fetchq");
 const featureCacheBuilder = require("./feature-cache-builder");
 const featureCacheMonitor = require("./feature-cache-monitor");
 const featureSotUpdate = require("./feature-sot-updater");
+const createProduct = require("./create-product");
 
 // Temporary feature to simulate an update in the products cache
 // It also truncates the queues:
@@ -35,16 +36,23 @@ const featureSimulateCacheUpdate = () => ({
 runHookApp({
   trace: "compact",
   settings: {
+    sot_products: {
+      url: process.env.SERVICE_SOT_PRODUCTS
+    },
+    sot_counters: {
+      url: process.env.SERVICE_SOT_COUNTERS
+    },
     changelog: {
       cursorId: process.env.CURSOR_ID
     }
   },
   services: [serviceFetchq, serviceFastify],
   features: [
-    featureCacheBuilder
+    featureCacheBuilder,
+    createProduct
     // featureCacheMonitor,
     // featureSotUpdate,
-    // featureSimulateCacheUpdate
+    // featureSimulateCacheUpdate,
   ]
 }).catch((err) => {
   console.error("ERROR:", err.message);

@@ -1,6 +1,15 @@
-actions: []
+actions:
+- name: createProduct
+  definition:
+    kind: synchronous
+    handler: '{{SERVICE_PRODUCTS_CACHE}}/products'
+  permissions:
+  - role: client
 custom_types:
   enums: []
-  input_objects: []
-  objects: []
+  input_objects:
+  - name: SampleInput
+  objects:
+  - name: SotProduct
+  - name: CacheProduct
   scalars: []

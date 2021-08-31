@@ -30,26 +30,6 @@
       set:
         is_updating: "true"
         etag_cache: now()
-  event_triggers:
-  - name: on_cache_products_change
-    definition:
-      enable_manual: false
-      delete:
-        columns: '*'
-      update:
-        columns:
-        - title
-        - price
-        - qt_booked
-        - qt_available
-        - is_updating
-        - is_deleting
-        - etag_cache
-    retry_conf:
-      num_retries: 0
-      interval_sec: 10
-      timeout_sec: 60
-    webhook_from_env: EVT_PRODUCTS_CACHE_UPDATE
 - table:
     schema: public
     name: changelog
