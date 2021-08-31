@@ -2,7 +2,7 @@ const changelog = require("./changelog");
 const onProductInsert = require("./on-product-insert-update");
 const onCountersInsert = require("./on-counters-insert-update");
 
-const featureCacheBuilder = ({ getContext, getConfig }) => ({
+const cacheBuilder = ({ getContext, getConfig }) => ({
   hook: "$FINISH",
   handler: async () => {
     // Get a reference to the Postgre's pool from Fetchq
@@ -37,4 +37,4 @@ const featureCacheBuilder = ({ getContext, getConfig }) => ({
   }
 });
 
-module.exports = featureCacheBuilder;
+module.exports = cacheBuilder;
