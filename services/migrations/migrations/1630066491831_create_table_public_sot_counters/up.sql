@@ -1,4 +1,11 @@
-CREATE TABLE "public"."sot_counters" ("product_id" integer NOT NULL, "counter_id" text NOT NULL, "value" integer NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("product_id","counter_id") , FOREIGN KEY ("product_id") REFERENCES "public"."sot_products"("id") ON UPDATE no action ON DELETE no action);
+CREATE TABLE "public"."sot_counters" (
+  "product_id" integer NOT NULL, 
+  "counter_id" text NOT NULL, 
+  "value" integer NOT NULL, 
+  "created_at" timestamptz NOT NULL DEFAULT now(), 
+  "updated_at" timestamptz NOT NULL DEFAULT now(), 
+  PRIMARY KEY ("product_id","counter_id")
+);
 CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
 RETURNS TRIGGER AS $$
 DECLARE

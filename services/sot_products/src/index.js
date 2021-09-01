@@ -5,6 +5,7 @@ const serviceFastifyHealthz = require("@forrestjs/service-fastify-healthz");
 const graphqlClient = require("./graphql-client");
 const createProduct = require("./create-product");
 const updateProduct = require("./update-product");
+const deleteProduct = require("./delete-product");
 
 runHookApp({
   trace: "compact",
@@ -15,7 +16,7 @@ runHookApp({
     }
   },
   services: [serviceFastify, serviceFastifyHealthz, graphqlClient],
-  features: [createProduct, updateProduct]
+  features: [createProduct, updateProduct, deleteProduct]
 }).catch((err) => {
   console.error("ERROR:", err.message);
 });
