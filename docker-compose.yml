@@ -94,7 +94,7 @@ services:
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "start:docker"]
     depends_on:
-      hasura:
+      postgres:
         condition: service_healthy
 
   products_cache:
@@ -117,5 +117,22 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-# Client Token
-# eyJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsiY2xpZW50Il0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6ImNsaWVudCJ9fQ.nqSC21CVr-clHDLRMoov3UCEgADVhumRofF7XhqPXLU
+
+  app:
+    image: node:14-alpine
+    volumes:
+      - .docker-data/app/node_modules:/usr/src/app/node_modules:cached
+      - ./services/app/package.json:/usr/src/app/package.json:delegated
+      - ./services/app/package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./services/app/src:/usr/src/app/src:delegated
+      - ./services/app/public:/usr/src/app/public:delegated
+    environment:
+      REACT_APP_SERVER_URL: http://hasura:8080/v1/graphql
+      REACT_APP_SERVER_KEY: eyJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsiY2xpZW50Il0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6ImNsaWVudCJ9fQ.nqSC21CVr-clHDLRMoov3UCEgADVhumRofF7XhqPXLU
+    ports:
+      - ${APP_PORT:-3000}:3000
+    working_dir: /usr/src/app
+    entrypoint: ["npm", "run", "start:docker"]
+    depends_on:
+      hasura:
+        condition: service_healthy
