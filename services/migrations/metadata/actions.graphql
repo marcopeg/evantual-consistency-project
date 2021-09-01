@@ -6,6 +6,16 @@ type Mutation {
   ): CacheProduct
 }
 
+type Mutation {
+  updateProduct(
+    id: Int!
+    title: String
+    price: Int
+    qt_available: Int
+    qt_booked: Int
+  ): CacheProduct
+}
+
 input SampleInput {
   username: String!
   password: String!

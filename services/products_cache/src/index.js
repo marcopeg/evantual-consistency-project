@@ -4,6 +4,8 @@ const serviceFetchq = require("@forrestjs/service-fetchq");
 
 const cacheBuilder = require("./cache-builder");
 const createProduct = require("./create-product");
+const updateProduct = require("./update-product");
+const updatesPropagator = require("./updates-propagator");
 
 runHookApp({
   trace: "compact",
@@ -19,7 +21,7 @@ runHookApp({
     }
   },
   services: [serviceFetchq, serviceFastify],
-  features: [cacheBuilder, createProduct]
+  features: [cacheBuilder, updatesPropagator, createProduct, updateProduct]
 }).catch((err) => {
   console.error("ERROR:", err.message);
 });

@@ -25,10 +25,7 @@ const handler = async (req, reply) => {
   // - Queue the change of the product's quantities
   const { qt_available } = req.body.input;
   try {
-    await req.getContext("fetchq").doc.append("update_product_counters", {
-      productId: productData.id,
-      qt_available
-    });
+    await req.getContext("fetchq").doc.append("update_counters", productData);
   } catch (err) {
     // In a real app this should just be a broadcasted notification message.
     return reply.code(400).send({
@@ -63,7 +60,7 @@ const handler = async (req, reply) => {
 
 const createProduct = () => ({
   method: "POST",
-  url: "/products",
+  url: "/products/create",
   schema,
   handler
 });
