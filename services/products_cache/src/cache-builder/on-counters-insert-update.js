@@ -3,24 +3,18 @@ const upsertSQL = `
     "id",
     "COUNTER_ID",
     "updated_at",
-    "etag_sot",
-    "is_updating",
-    "is_deleting"
+    "etag_sot_counters"
   ) VALUES (
     $1,
     $2,
     $3,
-    now(),
-    false,
-    false
+    now()
   )
   ON CONFLICT ON CONSTRAINT "cache_products_pkey"
   DO UPDATE SET 
     "COUNTER_ID" = EXCLUDED."COUNTER_ID",
     "updated_at" = EXCLUDED."updated_at",
-    "etag_sot" = EXCLUDED."etag_sot",
-    "is_updating" = EXCLUDED."is_updating",
-    "is_deleting" = EXCLUDED."is_deleting"
+    "etag_sot_counters" = EXCLUDED."etag_sot_counters"
   ;
 `;
 

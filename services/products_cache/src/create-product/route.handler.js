@@ -57,6 +57,7 @@ const handler = async (req, reply) => {
     });
   }
 
+  console.log(productCache);
   reply.send(productCache);
 };
 

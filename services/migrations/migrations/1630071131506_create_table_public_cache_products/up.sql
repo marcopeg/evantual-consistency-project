@@ -1,9 +1,8 @@
 CREATE TABLE "public"."cache_products" (
   "id" INTEGER PRIMARY KEY, 
-  "etag_sot" TIMESTAMPTZ DEFAULT NOW(), 
-  "etag_cache" TIMESTAMPTZ DEFAULT NOW(), 
-  "is_updating" BOOLEAN DEFAULT false,
-  "is_deleting" BOOLEAN DEFAULT false,
+  "etag_sot_products" TIMESTAMPTZ DEFAULT NOW(), 
+  "etag_sot_counters" TIMESTAMPTZ DEFAULT NOW(), 
+  "etag_cache" TIMESTAMPTZ DEFAULT NOW(),
   "created_at" TIMESTAMPTZ DEFAULT NOW(), 
   "updated_at" TIMESTAMPTZ DEFAULT NOW(), 
   "title" TEXT DEFAULT '', 

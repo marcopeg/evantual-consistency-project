@@ -7,10 +7,9 @@
       columns:
       - created_at
       - etag_cache
-      - etag_sot
+      - etag_sot_counters
+      - etag_sot_products
       - id
-      - is_deleting
-      - is_updating
       - price
       - qt_available
       - qt_booked
@@ -28,7 +27,6 @@
       filter: {}
       check: null
       set:
-        is_updating: "true"
         etag_cache: now()
 - table:
     schema: public

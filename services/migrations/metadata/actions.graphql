@@ -20,9 +20,15 @@ type SotProduct {
 }
 
 type CacheProduct {
+  id: Int!
   title: String!
   price: Int!
   qt_available: Int!
   qt_booked: Int!
+  created_at: String!
+  updated_at: String!
+  etag_cache: String!
+  etag_sot_products: String!
+  etag_sot_counters: String!
 }
 

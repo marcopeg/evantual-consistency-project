@@ -2,9 +2,9 @@ CREATE TABLE "public"."sot_products" (
   "id" serial NOT NULL, 
   "created_at" timestamptz NOT NULL DEFAULT now(), 
   "updated_at" timestamptz NOT NULL DEFAULT now(), 
-  "title" text NOT NULL,
+  "title" text NOT NULL UNIQUE,
   "price" integer not null default 0,
-  PRIMARY KEY ("id") 
+  PRIMARY KEY ("id")
 );
 CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
 RETURNS TRIGGER AS $$

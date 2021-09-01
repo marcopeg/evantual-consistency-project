@@ -5,18 +5,14 @@ const upsertSQL = `
     "price",
     "created_at",
     "updated_at",
-    "etag_sot",
-    "is_updating",
-    "is_deleting"
+    "etag_sot_products"
   ) VALUES (
     $1,
     $2,
     $3,
     $4,
     $5,
-    now(),
-    false,
-    false
+    now()
   )
   ON CONFLICT ON CONSTRAINT "cache_products_pkey"
   DO UPDATE SET 
@@ -24,9 +20,7 @@ const upsertSQL = `
     "price" = EXCLUDED."price",
     "created_at" = EXCLUDED."created_at",
     "updated_at" = EXCLUDED."updated_at",
-    "etag_sot" = EXCLUDED."etag_sot",
-    "is_updating" = EXCLUDED."is_updating",
-    "is_deleting" = EXCLUDED."is_deleting"
+    "etag_sot_products" = EXCLUDED."etag_sot_products"
   RETURNING *;
 `;
 
