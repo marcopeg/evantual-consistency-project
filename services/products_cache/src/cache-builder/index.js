@@ -1,5 +1,6 @@
 const changelog = require("./changelog");
 const onProductInsert = require("./on-product-insert-update");
+const onProductDelete = require("./on-product-delete");
 const onCountersInsert = require("./on-counters-insert-update");
 
 const cacheBuilder = ({ getContext, getConfig }) => ({
@@ -23,6 +24,9 @@ const cacheBuilder = ({ getContext, getConfig }) => ({
         case "product-was-created":
         case "product-was-updated":
           await onProductInsert(db, log);
+          break;
+        case "product-was-deleted":
+          await onProductDelete(db, log);
           break;
         case "counters-was-updated":
           await onCountersInsert(db, log);
