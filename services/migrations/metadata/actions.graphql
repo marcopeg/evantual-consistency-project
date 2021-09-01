@@ -1,9 +1,9 @@
 type Mutation {
-  createProduct(
-    title: String!
-    price: Int!
-    qt_available: Int!
-  ): CacheProduct
+  createProduct(title: String!, price: Int!, qt_available: Int!): CacheProduct
+}
+
+type Mutation {
+  deleteProduct(id: Int!): CacheProduct
 }
 
 type Mutation {
@@ -41,4 +41,3 @@ type CacheProduct {
   etag_sot_products: String!
   etag_sot_counters: String!
 }
-

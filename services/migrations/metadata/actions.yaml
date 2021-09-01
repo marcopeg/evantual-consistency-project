@@ -5,6 +5,12 @@ actions:
     handler: '{{SERVICE_PRODUCTS_CACHE}}/products/create'
   permissions:
   - role: client
+- name: deleteProduct
+  definition:
+    kind: synchronous
+    handler: '{{SERVICE_PRODUCTS_CACHE}}/products/delete'
+  permissions:
+  - role: client
 - name: updateProduct
   definition:
     kind: synchronous
